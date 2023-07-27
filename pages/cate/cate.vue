@@ -1,12 +1,12 @@
 <template>
 	<view>
+		<my-search @click="gotoSearch"></my-search>
 		<view class="scroll-view-container">
 			<!-- 左侧滚动视图区域 -->
 			<scroll-view class="left-scroll-view" scroll-y="true" :style="{height: wh+'px'}">
 				<block v-for="(item,index) in cateList" :key="index">
 						<view :class="['left-scroll-view-item',index===active?'active':'']" @click="activeChange(index)">{{item.cat_name}}</view>
 				</block>
-			
 			</scroll-view>
 			<!-- 右侧滚动视图区域 -->
 			<scroll-view class="right-scroll-view" scroll-y="true" :style="{height: wh+'px'}" :scroll-top="scrollTop">
@@ -38,7 +38,7 @@
 		},
 		onLoad(){
 			const sysInfo = uni.getSystemInfoSync()
-			this.wh = sysInfo.windowHeight
+			this.wh = sysInfo.windowHeight - 50
 			this.getCateList()   //获取分类数据列表方法
 		},
 		methods:{
@@ -59,6 +59,11 @@
 			gotoGoodsList(item){
 				uni.navigateTo({
 					url:'/subpkg/goods_list/goods_list?cid='+item.cat_id
+				})
+			},
+			gotoSearch(){
+				uni.navigateTo({
+					url:'/subpkg/search/search'
 				})
 			}
 		}
