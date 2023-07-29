@@ -35,7 +35,6 @@
 </script>
 
 <style lang="scss">
-.goods-list{
 	.goods-item{
 		display: flex;
 		padding: 10px 5px; 
@@ -63,5 +62,5 @@
 			}
 		}
 	}
-}
+
 </style>
