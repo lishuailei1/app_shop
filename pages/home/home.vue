@@ -29,7 +29,8 @@
 							mode="widthFix"></image>
 					</navigator>
 					<view class="right-img-box">
-						<navigator class="right-img-item" v-for="(item2,index2) in item.product_list" :key="index2" v-show="index2 !==0" :url="item2.url">
+						<navigator class="right-img-item" v-for="(item2,index2) in item.product_list" :key="index2"
+							v-show="index2 !==0" :url="item2.url">
 							<image :src="item2.image_src" :style="{width:item2.image_width+'rpx'}" mode="widthFix"></image>
 						</navigator>
 					</view>
@@ -40,7 +41,9 @@
 </template>
 
 <script>
+	import badgeMix from '@/mixins/tabbar-badge.js'
 	export default {
+		mixins: [badgeMix],
 		data() {
 			return {
 				swiperList: [], //轮播图数据列表
@@ -92,14 +95,14 @@
 				//请求成功  处理url地址
 				res.message.forEach(floor => {
 					floor.product_list.forEach(prod => {
-						prod.url='/subpkg/goods_list/goods_list?'+prod.navigator_url.split('?')[1]
+						prod.url = '/subpkg/goods_list/goods_list?' + prod.navigator_url.split('?')[1]
 					})
 				})
 				this.floorList = res.message
 			},
-			gotoSearch(){
+			gotoSearch() {
 				uni.navigateTo({
-					url:'/subpkg/search/search'
+					url: '/subpkg/search/search'
 				})
 			}
 		}
@@ -144,7 +147,8 @@
 			justify-content: space-around;
 		}
 	}
-	.search-box{
+
+	.search-box {
 		position: sticky;
 		top: 0;
 		z-index: 999;

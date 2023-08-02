@@ -21,13 +21,19 @@
 		<rich-text :nodes="goods_info.goods_introduce"></rich-text>
 
 		<view class="goods-carts">
-			<uni-goods-nav :options="options" :fill="true" :button-group="customButtonGroup" @click="onClick" @buttonClick="buttonClick"/>
+			<uni-goods-nav :options="options" :fill="true" :button-group="customButtonGroup" @click="onClick"
+				@buttonClick="buttonClick" />
 		</view>
 
 	</view>
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations,
+		mapGetters
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -41,7 +47,7 @@
 				}, {
 					icon: 'cart',
 					text: '购物车',
-					info:'0'
+					info: '0'
 				}],
 				customButtonGroup: [{
 						text: '加入购物车',
@@ -60,7 +66,24 @@
 			const goods_id = options.goods_id
 			this.getGoodsDetail(goods_id)
 		},
+
+		computed: {
+			...mapState('m_cart', []),
+			...mapGetters('m_cart', ['total'])
+		},
+		watch: {
+			total: {
+				handler(newVal) {
+					const findResult = this.options.find(x => x.text === '购物车')
+					if (findResult) {
+						findResult.info = newVal
+					}
+				},
+				immediate:true
+			}
+		},
 		methods: {
+			...mapMutations('m_cart', ['addToCart']),
 			//获取商品详情数据方法
 			async getGoodsDetail(goods_id) {
 				const {
@@ -82,11 +105,26 @@
 				})
 			},
 			// 购物车点击事件
-			onClick(e){
-				if(e.content.text==="购物车"){
+			onClick(e) {
+				if (e.content.text === "购物车") {
 					uni.switchTab({
-						url:'/pages/cart/cart'
+						url: '/pages/cart/cart'
 					})
+				}
+			},
+			buttonClick(e) {
+				if (e.content.text == '加入购物车') {
+					//组织商品信息对象
+					const goods = {
+						goods_id: this.goods_info.goods_id,
+						goods_name: this.goods_info.goods_name,
+						goods_price: this.goods_info.goods_price,
+						goods_count: 1,
+						goods_small_logo: this.goods_info.goods_small_logo,
+						goods_state: this.goods_info.goods_state,
+					}
+					//调用方法
+					this.addToCart(goods)
 				}
 			}
 		}
@@ -139,6 +177,7 @@
 			font-size: 12px;
 		}
 	}
+
 	.goods-carts {
 		position: fixed;
 		left: 0;
